@@ -64,7 +64,5 @@ namespace Tmpl8
 		for (linepoints l : codewordArray) {
 			screen->Line(l.x1, l.y1, l.x2, l.y2, l.color);
 		}
-
-		if (++frame == 36) frame = 0;
 	}
 };
