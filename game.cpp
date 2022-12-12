@@ -4,37 +4,36 @@
 
 namespace Tmpl8
 {
-	// -----------------------------------------------------------
-	// Initialize the application
-	// -----------------------------------------------------------
-	void Game::Init()
-	{
-	}
-	
-	// -----------------------------------------------------------
-	// Close down application
-	// -----------------------------------------------------------
-	void Game::Shutdown()
-	{
-	}
+    void Game::Init()
+    {
+        x = 100;
+        y = 0;
+    }
+    void Game::Shutdown() {}
 
-	static Sprite rotatingGun(new Surface("assets/aagun.tga"), 36);
-	static int frame = 0;
+    void Game::DrawI(int x_in, int y_in)
+    {
+        screen->Line(100 + x_in, 50 + y_in, 200 + x_in, 50 + y_in, 0xffffff);
+        screen->Line(150 + x_in, 50 + y_in, 150 + x_in, 300 + y_in, 0xffffff);
+        screen->Line(100 + x_in, 300 + y_in, 200 + x_in, 300 + y_in, 0xffffff);
+    }
 
-	// -----------------------------------------------------------
-	// Main application tick function
-	// -----------------------------------------------------------
-	void Game::Tick(float deltaTime)
-	{
-		// clear the graphics window
-		screen->Clear(0);
-		// print something in the graphics window
-		screen->Print("hello world", 2, 2, 0xffffff);
-		// print something to the text window
-		printf("this goes to the console window.\n");
-		// draw a sprite
-		rotatingGun.SetFrame(frame);
-		rotatingGun.Draw(screen, 100, 100);
-		if (++frame == 36) frame = 0;
-	}
+    void Game::DrawFatI(int x_in, int y_in)
+    {
+        DrawI(x_in, y_in);
+        DrawI(x_in + 1, y_in);
+        DrawI(x_in, y_in + 1);
+        DrawI(x_in + 1, y_in + 1);
+    }
+
+    void Game::Tick(float deltaTime)
+    {
+        screen->Clear(80);
+        DrawFatI(x, y);
+
+        if (movingRight) x++;
+        else x--;
+        if (x >= 500) movingRight = false;
+        if (x <= 100) movingRight = true;
+    }
 };
