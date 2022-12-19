@@ -1,40 +1,47 @@
 #include "game.h"
 #include "surface.h"
+#include "template.h"
 #include <cstdio> //printf
 
 namespace Tmpl8
 {
-	// -----------------------------------------------------------
-	// Initialize the application
-	// -----------------------------------------------------------
-	void Game::Init()
-	{
-	}
-	
-	// -----------------------------------------------------------
-	// Close down application
-	// -----------------------------------------------------------
-	void Game::Shutdown()
-	{
-	}
+	void Game::Init() {}
+	void Game::Shutdown() {}
 
-	static Sprite rotatingGun(new Surface("assets/aagun.tga"), 36);
-	static int frame = 0;
+	Sprite theSprite(new Surface("assets/ball.png"), 1);
+	int spriteX = 0;
+	int spriteY = 100;
+	int speedY = 1;
+	int speedX = 3;
+	int nBottomHits = 0;
 
-	// -----------------------------------------------------------
-	// Main application tick function
-	// -----------------------------------------------------------
 	void Game::Tick(float deltaTime)
 	{
-		// clear the graphics window
-		screen->Clear(0);
-		// print something in the graphics window
-		screen->Print("hello world", 2, 2, 0xffffff);
-		// print something to the text window
-		printf("this goes to the console window.\n");
-		// draw a sprite
-		rotatingGun.SetFrame(frame);
-		rotatingGun.Draw(screen, 100, 100);
-		if (++frame == 36) frame = 0;
+		spriteY += speedY;
+		speedY += 1;
+		spriteX += speedX;
+
+		const bool hitBottom = spriteY > ScreenHeight - theSprite.GetHeight();
+		printf("hitBottom: %i\n", hitBottom);
+
+		if (spriteX + theSprite.GetWidth() > ScreenWidth || spriteX < 0)
+		{
+			speedX *= -1;
+		}
+
+		if (nBottomHits < 50 && spriteY > ScreenHeight - theSprite.GetHeight())
+		{
+			spriteY = ScreenHeight - theSprite.GetHeight();
+			speedY = -(speedY - 2);
+			screen->Clear(0xff0000);
+			nBottomHits++;
+		}
+		else
+		{
+			screen->Clear(0);
+		}
+		theSprite.Draw(screen, spriteX, spriteY);
+
+
 	}
 };
