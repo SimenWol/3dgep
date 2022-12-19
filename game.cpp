@@ -40,7 +40,15 @@ namespace Tmpl8
 		{
 			screen->Clear(0);
 		}
-		theSprite.Draw(screen, spriteX, spriteY);
+		
+		if (nBottomHits < 51)
+		{
+			theSprite.Draw(screen, spriteX, spriteY);
+			if (nBottomHits == 50 && spriteY > ScreenHeight - theSprite.GetHeight())
+			{
+				nBottomHits++;
+			}
+		}
 
 
 	}
