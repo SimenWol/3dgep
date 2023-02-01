@@ -1,6 +1,6 @@
 #include "game.h"
 #include "surface.h"
-#include <cstdio> //printf
+#include <iostream>
 #include <utility>
 
 namespace Tmpl8
@@ -30,11 +30,11 @@ namespace Tmpl8
 		// Multiply DeltaTime by 0.001 to get deltaTime in seconds
 		// By using std::min, you prevent long pauses messing up the physics
 		deltaTime = std::min(deltaTime * 0.001f, 0.05f);
-		printf("%f\n", deltaTime);
+		std::cout << deltaTime << std::endl;
 
 		screen->Clear(0);
 		spriteY += speed * deltaTime;
-		speed += 1000.0f * deltaTime;
+		speed += 4000.0f * deltaTime;
 
 		if (spriteY > (screenHeight - static_cast<float>(theSprite.GetHeight())))
 		{
