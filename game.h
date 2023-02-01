@@ -9,6 +9,7 @@ public:
 	void SetTarget( Surface* surface ) { screen = surface; }
 	void Init();
 	void Shutdown();
+	void DrawBigDot(int loc_in);
 	void Tick( float deltaTime );
 	void MouseUp( int button ) { /* implement if you want to detect mouse button presses */ }
 	void MouseDown( int button ) { /* implement if you want to detect mouse button presses */ }
