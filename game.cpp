@@ -4,37 +4,19 @@
 
 namespace Tmpl8
 {
-	// -----------------------------------------------------------
-	// Initialize the application
-	// -----------------------------------------------------------
-	void Game::Init()
-	{
-	}
+	void Game::Init() {}
 	
-	// -----------------------------------------------------------
-	// Close down application
-	// -----------------------------------------------------------
-	void Game::Shutdown()
-	{
-	}
+	void Game::Shutdown() {}
 
-	static Sprite rotatingGun(new Surface("assets/aagun.tga"), 36);
-	static int frame = 0;
-
-	// -----------------------------------------------------------
-	// Main application tick function
-	// -----------------------------------------------------------
+	// Screen: 800 x 512 pixels
 	void Game::Tick(float deltaTime)
 	{
-		// clear the graphics window
-		screen->Clear(0);
-		// print something in the graphics window
-		screen->Print("hello world", 2, 2, 0xffffff);
-		// print something to the text window
-		printf("this goes to the console window.\n");
-		// draw a sprite
-		rotatingGun.SetFrame(frame);
-		rotatingGun.Draw(screen, 100, 100);
-		if (++frame == 36) frame = 0;
+		Pixel* address = screen->GetBuffer();
+
+		for (int i = 0; i < (400 + 400 * 800); i++)
+		{
+			if (i % 2 == 0) address[i] = 0xffffff;
+			else address[i] = 0x000000;
+		}
 	}
 };
