@@ -4,37 +4,41 @@
 
 namespace Tmpl8
 {
-	// -----------------------------------------------------------
-	// Initialize the application
-	// -----------------------------------------------------------
+	static Sprite spectrum(new Surface("assets/spectrum.jpg"), 1);
+
 	void Game::Init()
 	{
+		spectrum.Draw(screen, 0, 0);
 	}
 	
-	// -----------------------------------------------------------
-	// Close down application
-	// -----------------------------------------------------------
-	void Game::Shutdown()
-	{
-	}
+	void Game::Shutdown() {}
 
-	static Sprite rotatingGun(new Surface("assets/aagun.tga"), 36);
-	static int frame = 0;
-
-	// -----------------------------------------------------------
-	// Main application tick function
-	// -----------------------------------------------------------
 	void Game::Tick(float deltaTime)
 	{
-		// clear the graphics window
-		screen->Clear(0);
-		// print something in the graphics window
-		screen->Print("hello world", 2, 2, 0xffffff);
-		// print something to the text window
-		printf("this goes to the console window.\n");
-		// draw a sprite
-		rotatingGun.SetFrame(frame);
-		rotatingGun.Draw(screen, 100, 100);
-		if (++frame == 36) frame = 0;
+		Pixel* address = screen->GetBuffer();
+
+		for (int x = 0; x < screen->GetWidth(); x++)
+		{
+			for (int y = 0; y < screen->GetHeight(); y++)
+			{
+				int locColor = address[x + y * 800];
+				
+				if (locColor != 0x000000)
+				{
+					int maskR = 255 << 16;
+					int red = (locColor & maskR) >> 16;
+					int maskG = 255 << 8;
+					int green = (locColor & maskG) >> 8;
+					int maskB = 255;
+					int blue = locColor & maskB;
+
+					if (red != 0) { red -= 1; }
+					if (green != 0) { green -= 1; }
+					if (blue != 0) { blue -= 1; }
+
+					address[x + y * 800] = ((red << 16) + (green << 8) + blue);
+				}
+			}
+		}
 	}
 };
