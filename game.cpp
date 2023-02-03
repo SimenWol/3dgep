@@ -4,12 +4,7 @@
 
 namespace Tmpl8
 {
-	static Sprite spectrum(new Surface("assets/spectrum.jpg"), 1);
-
-	void Game::Init()
-	{
-		spectrum.Draw(screen, 0, 0);
-	}
+	void Game::Init() {}
 	
 	void Game::Shutdown() {}
 
@@ -17,28 +12,26 @@ namespace Tmpl8
 	{
 		Pixel* address = screen->GetBuffer();
 
-		for (int x = 0; x < screen->GetWidth(); x++)
+		for (int x = 0; x < 200; x++)
 		{
-			for (int y = 0; y < screen->GetHeight(); y++)
+			for (int y = 0; y < 200; y++)
 			{
-				int locColor = address[x + y * 800];
-				
-				if (locColor != 0x000000)
+				if ((x % 2) == 1)
 				{
-					int maskR = 255 << 16;
-					int red = (locColor & maskR) >> 16;
-					int maskG = 255 << 8;
-					int green = (locColor & maskG) >> 8;
-					int maskB = 255;
-					int blue = locColor & maskB;
-
-					if (red != 0) { red -= 1; }
-					if (green != 0) { green -= 1; }
-					if (blue != 0) { blue -= 1; }
-
-					address[x + y * 800] = ((red << 16) + (green << 8) + blue);
+					if ((y % 2) == 1) { address[x + y * 800] = 0xffffff; }
+					else { address[x + y * 800] = 0x000000; }
+				}
+				else
+				{
+					if ((y % 20 == 0)) { address[x + y * 800] = 0xffffff; }
+					else { address[x + y * 800] = 0x000000; }
 				}
 			}
+		}
+
+		for (int x = 200; x < 400; x++)
+		{
+			for (int y = 0; y < 200; y++) { address[x + y * 800] = 0x808080; }
 		}
 	}
 };
