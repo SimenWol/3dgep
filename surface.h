@@ -58,6 +58,8 @@ public:
 	void Clear( Pixel a_Color );
 	void Line( float x1, float y1, float x2, float y2, Pixel color );
 	void Plot( int x, int y, Pixel c );
+	void Plot( float x, float y, Pixel c );
+	Pixel GetSubPixelValue(Pixel c, float x_overlap, float y_overlap);
 	void LoadImage( char* a_File );
 	void CopyTo( Surface* a_Dst, int a_X, int a_Y );
 	void BlendCopyTo( Surface* a_Dst, int a_X, int a_Y );

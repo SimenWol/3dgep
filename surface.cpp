@@ -189,6 +189,41 @@ void Surface::Plot( int x, int y, Pixel c )
 	if ((x >= 0) && (y >= 0) && (x < m_Width) && (y < m_Height)) m_Buffer[x + y * m_Pitch] = c;
 }
 
+void Surface::Plot(float x, float y, Pixel c)
+{
+	if ((x >= 0) && (y >= 0) && ((x + 1) < m_Width) && ((y + 1) < m_Height))
+	{
+		float x1 = fmodf(x, 1.0f);
+		float x2 = 1.0f - x1;
+		float y1 = fmodf(y, 1.0f);
+		float y2 = 1.0f - y1;
+
+		int xi = static_cast<int>(x);
+		int yi = static_cast<int>(y);
+
+		m_Buffer[xi + (yi * m_Pitch)] = AddBlend(GetSubPixelValue(c, x1, y1), m_Buffer[xi + (yi * m_Pitch)]);
+		m_Buffer[xi + 1 + (yi * m_Pitch)] = AddBlend(GetSubPixelValue(c, x2, y1), m_Buffer[xi + 1 + (yi * m_Pitch)]);
+		m_Buffer[xi + ((yi + 1) * m_Pitch)] = AddBlend(GetSubPixelValue(c, x1, y2), m_Buffer[xi + ((yi + 1) * m_Pitch)]);
+		m_Buffer[xi + 1 + ((yi + 1) * m_Pitch)] = AddBlend(GetSubPixelValue(c, x2, y2), m_Buffer[xi + 1 + ((yi + 1) * m_Pitch)]);
+
+		// m_Buffer[x + y * m_Pitch] = c;
+	}
+}
+
+Pixel Surface::GetSubPixelValue(Pixel c, float x_overlap, float y_overlap)
+{
+	float value = x_overlap * y_overlap;
+
+	Pixel r = value * ((c & RedMask) >> 16);
+	Pixel g = value * ((c & GreenMask) >> 8);
+	Pixel b = value * (c & BlueMask);
+
+	r <<= 16;
+	g <<= 8;
+
+	return r | g | b;
+}
+
 void Surface::Box( int x1, int y1, int x2, int y2, Pixel c )
 {
 	Line( (float)x1, (float)y1, (float)x2, (float)y1, c );

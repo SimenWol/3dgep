@@ -26,7 +26,7 @@ namespace Tmpl8
             float dist = sqrtf(dx * dx + dy * dy);
             if (dist < 50)
                 x[i] += dx / dist, y[i] += dy / dist;
-            screen->Plot((int)x[i], (int)y[i], 0xffffff);
+            screen->Plot(x[i], y[i], 0xffffff);
         }
     }
 };
