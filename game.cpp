@@ -4,22 +4,29 @@
 
 namespace Tmpl8
 {
-    float x = 400, y = 256;
+    float x[4096], y[4096];
 
-    void Game::Init() {}
+    void Game::Init()
+    {
+        for (int i = 0; i < 4096; i++)
+        {
+            x[i] = float(IRand(800)), y[i] = float(IRand(512));
+        }
+    }
 
     void Game::Shutdown() {}
 
     void Game::Tick(float deltaTime)
     {
         screen->Clear(0);
-        screen->Line(mousex, 0, mousex, 511, 0xff0000);
-        screen->Line(0, mousey, 799, mousey, 0xff0000);
 
-        float dx = x - mousex, dy = y - mousey;
-        float dist = sqrtf(dx * dx + dy * dy);
-        if (dist < 50)
-            x += dx / dist, y += dy / dist;
-        screen->Plot((int)x, (int)y, 0xffffff);
+        for (int i = 0; i < 4096; i++)
+        {
+            float dx = x[i] - mousex, dy = y[i] - mousey;
+            float dist = sqrtf(dx * dx + dy * dy);
+            if (dist < 50)
+                x[i] += dx / dist, y[i] += dy / dist;
+            screen->Plot((int)x[i], (int)y[i], 0xffffff);
+        }
     }
 };
