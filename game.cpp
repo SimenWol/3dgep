@@ -41,16 +41,20 @@ namespace Tmpl8
 
     void Game::Tick(float deltaTime)
     {
+        int topLeftX, topLeftY;
+        topLeftX = screen->GetWidth() / 2 - 5 * 32;
+        topLeftY = screen->GetHeight() / 2 - static_cast<int>(2.5 * 32);
+
         screen->Clear(0);
         for (int y = 0; y < 5; y++)
             for (int x = 0; x < 10; x++)
             {
                 int tx = map[y][x * 4] - 'a';
                 int ty = map[y][x * 4 + 1] - 'a';
-                DrawTile(tx, ty, screen, x * 32, y * 32);
+                DrawTile(tx, ty, screen, topLeftX + x * 32, topLeftY + y * 32);
             }
 
-        tank.Draw(screen, px, py);
+        tank.Draw(screen, px + topLeftX, py + topLeftY);
 
         int nx = px, ny = py;
         if (GetAsyncKeyState(VK_LEFT)) 
