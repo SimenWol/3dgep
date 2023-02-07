@@ -35,6 +35,8 @@ namespace Tmpl8
     // Check if the player can move over the tile at pos x, y.
     bool CheckPos(int x, int y)
     {
+        x += 10;
+        y += 10;
         int tx = lround(x) / 32, ty = lround(y) / 32;
         return map[ty][tx * 4 + 2] != 'X';
     }
