@@ -41,6 +41,9 @@ namespace Tmpl8
         return map[ty][tx * 4 + 2] != 'X';
     }
 
+
+    int tankFrame = 0, tankFrameCooldown = 0;
+
     void Game::Tick(float deltaTime)
     {
         int topLeftX, topLeftY;
@@ -59,25 +62,56 @@ namespace Tmpl8
         tank.Draw(screen, px + topLeftX, py + topLeftY);
 
         int nx = px, ny = py;
-        if (GetAsyncKeyState(VK_LEFT)) 
+        if (GetAsyncKeyState(VK_LEFT)) // 12
         {
+            if (tankFrame != 12 && tankFrameCooldown == 0) {
+                if (tankFrame == 0) { tankFrame = 15; }
+                else if (tankFrame < 4 || tankFrame > 12) { tankFrame--; }
+                else if (tankFrame >= 4 && tankFrame < 16) { tankFrame++; }
+
+                tankFrameCooldown = 5;
+            }
+
             nx--;
-            tank.SetFrame(12);
+            tank.SetFrame(tankFrame);
         }
-        if (GetAsyncKeyState(VK_RIGHT))
+        if (GetAsyncKeyState(VK_RIGHT)) // 4
         {
+            if (tankFrame != 4 && tankFrameCooldown == 0) {
+                if (tankFrame == 15) { tankFrame = 0; }
+                else if (tankFrame > 12 || tankFrame < 4) { tankFrame++; }
+                else if (tankFrame > 4 && tankFrame <= 12) { tankFrame--; }
+
+                tankFrameCooldown = 5;
+            }
+
             nx++;
-            tank.SetFrame(4);
+            tank.SetFrame(tankFrame);
         }
-        if (GetAsyncKeyState(VK_UP))
+        if (GetAsyncKeyState(VK_UP)) // 0
         {
+            if (tankFrame != 0 && tankFrameCooldown == 0) {
+                if (tankFrame == 15) { tankFrame = 0; }
+                else if (tankFrame > 8) { tankFrame++; }
+                else if (tankFrame <= 8) { tankFrame--; }
+
+                tankFrameCooldown = 5;
+            }
+
             ny--;
-            tank.SetFrame(0);
+            tank.SetFrame(tankFrame);
         }
-        if (GetAsyncKeyState(VK_DOWN))
+        if (GetAsyncKeyState(VK_DOWN)) // 8
         {
+            if (tankFrame != 8 && tankFrameCooldown == 0) {
+                if (tankFrame < 8) { tankFrame++; }
+                else if (tankFrame > 8) { tankFrame--; }
+
+                tankFrameCooldown = 5;
+            }
+
             ny++;
-            tank.SetFrame(8);
+            tank.SetFrame(tankFrame);
         }
 
         if (CheckPos(nx, ny) && CheckPos(nx + 30, ny + 30) &&
@@ -86,5 +120,7 @@ namespace Tmpl8
             px = nx;
             py = ny;
         }
+
+        if (tankFrameCooldown != 0) { tankFrameCooldown--; }
     }
 };
